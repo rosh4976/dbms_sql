@@ -141,4 +141,140 @@ mysql> select name from students where age>20 and dnum=1;
 2 rows in set (0.00 sec)
 
 mysql> 
+Database changed
+mysql> select * from students,department;
++-----------+------------+------+------+-----+-------+
+| studentid | name       | age  | dnum | dno | dname |
++-----------+------------+------+------+-----+-------+
+|       101 | midhun k   |   22 |    1 |   1 | mca   |
+|       101 | midhun k   |   22 |    1 |   2 | mba   |
+|       102 | ann mariya |   30 |    2 |   1 | mca   |
+|       102 | ann mariya |   30 |    2 |   2 | mba   |
+|       103 | sidharth m |   21 |    1 |   1 | mca   |
+|       103 | sidharth m |   21 |    1 |   2 | mba   |
++-----------+------------+------+------+-----+-------+
+6 rows in set (0.00 sec)
+
+mysql> select * from department;
++-----+-------+
+| dno | dname |
++-----+-------+
+|   2 | mba   |
+|   1 | mca   |
++-----+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into department values(2,'bca');\
+ERROR 1062 (23000): Duplicate entry '2' for key 'department.PRIMARY'
+mysql> insert into department values(3,'bca');\
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from department;
++-----+-------+
+| dno | dname |
++-----+-------+
+|   3 | bca   |
+|   2 | mba   |
+|   1 | mca   |
++-----+-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from students,department;
++-----------+------------+------+------+-----+-------+
+| studentid | name       | age  | dnum | dno | dname |
++-----------+------------+------+------+-----+-------+
+|       101 | midhun k   |   22 |    1 |   1 | mca   |
+|       101 | midhun k   |   22 |    1 |   2 | mba   |
+|       101 | midhun k   |   22 |    1 |   3 | bca   |
+|       102 | ann mariya |   30 |    2 |   1 | mca   |
+|       102 | ann mariya |   30 |    2 |   2 | mba   |
+|       102 | ann mariya |   30 |    2 |   3 | bca   |
+|       103 | sidharth m |   21 |    1 |   1 | mca   |
+|       103 | sidharth m |   21 |    1 |   2 | mba   |
+|       103 | sidharth m |   21 |    1 |   3 | bca   |
++-----------+------------+------+------+-----+-------+
+9 rows in set (0.00 sec)
+
+mysql> select * from students,department where students.dnum=department.dno;
++-----------+------------+------+------+-----+-------+
+| studentid | name       | age  | dnum | dno | dname |
++-----------+------------+------+------+-----+-------+
+|       101 | midhun k   |   22 |    1 |   1 | mca   |
+|       102 | ann mariya |   30 |    2 |   2 | mba   |
+|       103 | sidharth m |   21 |    1 |   1 | mca   |
++-----------+------------+------+------+-----+-------+
+3 rows in set (0.00 sec)
+
+mysql> select name from students department=mca and age>20;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=mca and age>20' at line 1
+mysql> 
+mysql> select name from students where age>20 and dname=mca;
+ERROR 1054 (42S22): Unknown column 'dname' in 'where clause'
+mysql> select name from students,department  where age>20 and dname=mca;
+ERROR 1054 (42S22): Unknown column 'mca' in 'where clause'
+mysql> select name from students,department  where age>20 and dname='mca';
++------------+
+| name       |
++------------+
+| midhun k   |
+| ann mariya |
+| sidharth m |
++------------+
+3 rows in set (0.00 sec)
+
+mysql> select name from students,department  where age>21 and dname='mca';
++------------+
+| name       |
++------------+
+| midhun k   |
+| ann mariya |
++------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from books;
++--------+---------------------------+----------------------+-------+------------------+
+| bookid | title                     | author               | price | publication_date |
++--------+---------------------------+----------------------+-------+------------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |
+|      4 |  Algorithms               | Cormen               |   100 | 2011-01-23       |
++--------+---------------------------+----------------------+-------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from bookissues;
+Empty set (0.00 sec)
+
+mysql> desc bookissues;
++-------------+------+------+-----+---------+-------+
+| Field       | Type | Null | Key | Default | Extra |
++-------------+------+------+-----+---------+-------+
+| bookid      | int  | YES  | MUL | NULL    |       |
+| studentid   | int  | YES  | MUL | NULL    |       |
+| issue_date  | date | YES  |     | NULL    |       |
+| return_date | date | YES  |     | NULL    |       |
++-------------+------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into bookissues(bookid,studentid,issue_date,return_date)values(23,45,11/12/2000,01/01/2001);
+ERROR 1292 (22007): Incorrect date value: '0.000458333333000000' for column 'issue_date' at row 1
+mysql> insert into bookissues(bookid,studentid,issue_date,return_date)values(23,45,'11/12/2000','01/01/2001');
+ERROR 1292 (22007): Incorrect date value: '11/12/2000' for column 'issue_date' at row 1
+mysql> insert into bookissues(bookid,studentid,issue_date,return_date)values(23,45,'11-12-2000','01/01/2001');
+ERROR 1292 (22007): Incorrect date value: '11-12-2000' for column 'issue_date' at row 1
+mysql> insert into bookissues(bookid,studentid,issue_date,return_date)values(23,45,'2000-01-09','01/01/2001');
+ERROR 1292 (22007): Incorrect date value: '01/01/2001' for column 'return_date' at row 1
+mysql> insert into bookissues(bookid,studentid,issue_date,return_date)values(23,45,'2000-01-09','2000-01-23');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`24mca46`.`bookissues`, CONSTRAINT `bookissues_fkey_bookid` FOREIGN KEY (`bookid`) REFERENCES `books` (`bookid`))
+mysql> -- Ensure bookid 23 exists in books table
+mysql> SELECT * FROM books WHERE bookid = 23;
+Empty set (0.00 sec)
+
+mysql> 
+mysql> -- Insert with proper date format if bookid 23 exists
+mysql> INSERT INTO bookissues(bookid, studentid, issue_date, return_date)
+    -> VALUES (23, 45, '2000-12-11', '2001-01-01');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`24mca46`.`bookissues`, CONSTRAINT `bookissues_fkey_bookid` FOREIGN KEY (`bookid`) REFERENCES `books` (`bookid`))
+mysql> 
+
 
