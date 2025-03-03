@@ -171,4 +171,169 @@ mysql> SELECT s.studentid, s.name, d.dname AS department_name FROM students s JO
 3 rows in set (0.01 sec)
 
 mysql> 
+mysql> select age from students;
++------+
+| age  |
++------+
+|   22 |
+|   30 |
+|   21 |
++------+
+3 rows in set (0.00 sec)
+
+mysql> update students set age=22 where studentid=103;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from students;
++-----------+------------+------+------+
+| studentid | name       | age  | dnum |
++-----------+------------+------+------+
+|       101 | midhun k   |   22 |    1 |
+|       102 | ann mariya |   30 |    2 |
+|       103 | sidharth m |   22 |    1 |
++-----------+------------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> select distinct age from students;
++------+
+| age  |
++------+
+|   22 |
+|   30 |
++------+
+2 rows in set (0.00 sec)
+
+mysql> select author from book where author like '%m';
+ERROR 1146 (42S02): Table '24mca46.book' doesn't exist
+mysql> select author from books where author like '%m';
++----------------------+
+| author               |
++----------------------+
+|  Andrew S. Tanenbaum |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select author from books where author like '%m%';
++----------------------+
+| author               |
++----------------------+
+| Ramez Elmasri        |
+|  Andrew S. Tanenbaum |
+| Cormen               |
++----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select author from books where author like 'm%';
+Empty set (0.00 sec)
+
+mysql> select author from books where author like '%r%';
++----------------------+
+| author               |
++----------------------+
+| Ramez Elmasri        |
+| Silberschatz         |
+|  Andrew S. Tanenbaum |
+| Cormen               |
++----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select bookid,name,price from books;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> select * from books;
++--------+---------------------------+----------------------+-------+------------------+
+| bookid | title                     | author               | price | publication_date |
++--------+---------------------------+----------------------+-------+------------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |
+|      4 |  Algorithms               | Cormen               |   100 | 2011-01-23       |
++--------+---------------------------+----------------------+-------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> select bookid,title,price from books;
++--------+---------------------------+-------+
+| bookid | title                     | price |
++--------+---------------------------+-------+
+|      1 | Database Systems          |   500 |
+|      2 | Operating System Concepts |   650 |
+|      3 | Computer Networks         |   700 |
+|      4 |  Algorithms               |   100 |
++--------+---------------------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select bookid,title,price,price*1.1 from books;
++--------+---------------------------+-------+-----------+
+| bookid | title                     | price | price*1.1 |
++--------+---------------------------+-------+-----------+
+|      1 | Database Systems          |   500 |     550.0 |
+|      2 | Operating System Concepts |   650 |     715.0 |
+|      3 | Computer Networks         |   700 |     770.0 |
+|      4 |  Algorithms               |   100 |     110.0 |
++--------+---------------------------+-------+-----------+
+4 rows in set (0.01 sec)
+
+mysql> select bookid,title,price,price*1.1 As increased price from books;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'price from books' at line 1
+mysql> select bookid,title,price,price*1.1 As increased_price from books;
++--------+---------------------------+-------+-----------------+
+| bookid | title                     | price | increased_price |
++--------+---------------------------+-------+-----------------+
+|      1 | Database Systems          |   500 |           550.0 |
+|      2 | Operating System Concepts |   650 |           715.0 |
+|      3 | Computer Networks         |   700 |           770.0 |
+|      4 |  Algorithms               |   100 |           110.0 |
++--------+---------------------------+-------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select name from students where age<30 and age>20;
++------------+
+| name       |
++------------+
+| midhun k   |
+| sidharth m |
++------------+
+2 rows in set (0.00 sec)
+
+mysql> select name * \students where age<30 and age>20;
+--------------
+mysql  Ver 8.0.36 for Linux on x86_64 (Source distribution)
+
+Connection id:		101
+Current database:	24mca46
+Current user:		24mca46@172.20.3.20
+SSL:			Cipher in use is TLS_AES_256_GCM_SHA384
+Current pager:		stdout
+Using outfile:		''
+Using delimiter:	;
+Server version:		8.0.36 Source distribution
+Protocol version:	10
+Connection:		172.20.3.1 via TCP/IP
+Server characterset:	utf8mb4
+Db     characterset:	utf8mb4
+Client characterset:	utf8mb4
+Conn.  characterset:	utf8mb4
+TCP port:		3306
+Binary data as:		Hexadecimal
+Uptime:			3 hours 8 min 37 sec
+
+Threads: 66  Questions: 3467  Slow queries: 0  Opens: 973  Flush tables: 3  Open tables: 775  Queries per second avg: 0.306
+--------------
+
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> select name * students where age<30 and age>20;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> select  * students where age<30 and age>20;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'students where age<30 and age>20' at line 1
+mysql> select  * from  students where age<30 and age>20;
++-----------+------------+------+------+
+| studentid | name       | age  | dnum |
++-----------+------------+------+------+
+|       101 | midhun k   |   22 |    1 |
+|       103 | sidharth m |   22 |    1 |
++-----------+------------+------+------+
+2 rows in set (0.00 sec)
+
+mysql> 
+
 
