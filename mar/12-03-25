@@ -1,0 +1,247 @@
+[mca@localhost ~]$ mySQL 24mca46
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 79
+Server version: 8.0.36 Source distribution
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use 24mca46
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select books.title,books.author from books inner join bookissues on books.bookid=bookissues.bookid;
++---------------------------+----------------------+
+| title                     | author               |
++---------------------------+----------------------+
+| Database Systems          | Ramez Elmasri        |
+| Operating System Concepts | Silberschatz         |
+| Computer Networks         |  Andrew S. Tanenbaum |
++---------------------------+----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from books,bookissues where books.bookid=bookissues.bookid;
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+| bookid | title                     | author               | price | publication_date | bookid | studentid | issue_date | return_date |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |      1 |       101 | 2000-01-21 | 2000-02-12  |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |      2 |       102 | 2000-01-25 | 2000-01-27  |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |      3 |       103 | 2000-02-25 | 2000-03-06  |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select books.title,books.author * from books inner join bookissues on books.bookid=bookissues.bookid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from books inner join bookissues on books.bookid=bookissues.bookid' at line 1
+mysql> select books.title,books.author *  from books inner join bookissues on book
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from books inner join bookissues on books.bookid=bookissues.bookid' at line 1
+mysql> select (books.title,books.author) *  from books inner join bookissues on
+books.bookid=bookissues.bookid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from books inner join bookissues on books.bookid=bookissues.bookid' at line 1
+mysql> select * from books,bookissues where books.bookid=bookissues.bookid;
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+| bookid | title                     | author               | price | publication_date | bookid | studentid | issue_date | return_date |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |      1 |       101 | 2000-01-21 | 2000-02-12  |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |      2 |       102 | 2000-01-25 | 2000-01-27  |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |      3 |       103 | 2000-02-25 | 2000-03-06  |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from books;
++--------+---------------------------+----------------------+-------+------------------+
+| bookid | title                     | author               | price | publication_date |
++--------+---------------------------+----------------------+-------+------------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |
+|      4 |  Algorithms               | Cormen               |   100 | 2011-01-23       |
+|      5 | xyz                       | fyh                  |   565 | 2020-05-09       |
++--------+---------------------------+----------------------+-------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from bookissues;
++--------+-----------+------------+-------------+
+| bookid | studentid | issue_date | return_date |
++--------+-----------+------------+-------------+
+|      1 |       101 | 2000-01-21 | 2000-02-12  |
+|      2 |       102 | 2000-01-25 | 2000-01-27  |
+|      3 |       103 | 2000-02-25 | 2000-03-06  |
++--------+-----------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select books.title,books.author from books left outer join bookissues on books.bookid=bookissues.bookid;
++---------------------------+----------------------+
+| title                     | author               |
++---------------------------+----------------------+
+| Database Systems          | Ramez Elmasri        |
+| Operating System Concepts | Silberschatz         |
+| Computer Networks         |  Andrew S. Tanenbaum |
+|  Algorithms               | Cormen               |
+| xyz                       | fyh                  |
++---------------------------+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> select books.title,books.author  * from books left outer join bookissues on books.bookid=bookissues.bookid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from books left outer join bookissues on books.bookid=bookissues.bookid' at line 1
+mysql> select  * from books left outer join bookissues on books.bookid=bookissues.bookid;
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+| bookid | title                     | author               | price | publication_date | bookid | studentid | issue_date | return_date |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |      1 |       101 | 2000-01-21 | 2000-02-12  |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |      2 |       102 | 2000-01-25 | 2000-01-27  |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |      3 |       103 | 2000-02-25 | 2000-03-06  |
+|      4 |  Algorithms               | Cormen               |   100 | 2011-01-23       |   NULL |      NULL | NULL       | NULL        |
+|      5 | xyz                       | fyh                  |   565 | 2020-05-09       |   NULL |      NULL | NULL       | NULL        |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> select  * from books left outer join bookissues on books.bookid=bookissues.bookid is NULL;
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+| bookid | title                     | author               | price | publication_date | bookid | studentid | issue_date | return_date |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+|      1 | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |   NULL |      NULL | NULL       | NULL        |
+|      2 | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |   NULL |      NULL | NULL       | NULL        |
+|      3 | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |   NULL |      NULL | NULL       | NULL        |
+|      4 |  Algorithms               | Cormen               |   100 | 2011-01-23       |   NULL |      NULL | NULL       | NULL        |
+|      5 | xyz                       | fyh                  |   565 | 2020-05-09       |   NULL |      NULL | NULL       | NULL        |
++--------+---------------------------+----------------------+-------+------------------+--------+-----------+------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select  * from books left outer join bookissues on books.bookid where bookissues.bookid is NULL;
+Empty set (0.00 sec)
+
+mysql> select  * from books left outer join bookissues on books.bookid=bookissues.bookid where bookissues.bookid is NULL;
++--------+-------------+--------+-------+------------------+--------+-----------+------------+-------------+
+| bookid | title       | author | price | publication_date | bookid | studentid | issue_date | return_date |
++--------+-------------+--------+-------+------------------+--------+-----------+------------+-------------+
+|      4 |  Algorithms | Cormen |   100 | 2011-01-23       |   NULL |      NULL | NULL       | NULL        |
+|      5 | xyz         | fyh    |   565 | 2020-05-09       |   NULL |      NULL | NULL       | NULL        |
++--------+-------------+--------+-------+------------------+--------+-----------+------------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select student.name,books.title,books.author from books inner join bookissues on boks.bookid=bookissues.bookid inner join students on students.studentid=bookissues.studentid;
+ERROR 1054 (42S22): Unknown column 'student.name' in 'field list'
+mysql> select students.name,books.title,books.author from books inner join bookissues on boks.bookid=bookissues.bookid inner join students on students.studentid=bookissues.studentid;
+ERROR 1054 (42S22): Unknown column 'boks.bookid' in 'on clause'
+mysql> select students.name,books.title,books.author from books inner join bookissues on books.bookid=bookissues.bookid inner
+join students on students.studentid=bookissues.studentid;
++------------+---------------------------+----------------------+
+| name       | title                     | author               |
++------------+---------------------------+----------------------+
+| midhun k   | Database Systems          | Ramez Elmasri        |
+| ann mariya | Operating System Concepts | Silberschatz         |
+| sidharth m | Computer Networks         |  Andrew S. Tanenbaum |
++------------+---------------------------+----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from students;
++-----------+------------+------+------+
+| studentid | name       | age  | dnum |
++-----------+------------+------+------+
+|       101 | midhun k   |   22 |    1 |
+|       102 | ann mariya |   30 |    2 |
+|       103 | sidharth m |   22 |    1 |
+|       104 | abc        |   24 |    2 |
++-----------+------------+------+------+
+4 rows in set (0.00 sec)
+
+mysql> select * from department;
++-----+-------+
+| dno | dname |
++-----+-------+
+|   3 | bca   |
+|   2 | mba   |
+|   1 | mca   |
++-----+-------+
+3 rows in set (0.00 sec)
+
+mysql> select students.studentid,students.name,department.dname from students inner join bookissues on stuents.studentid=bookissues.studentid inner join department on department.dname=students.dnum;
+ERROR 1054 (42S22): Unknown column 'stuents.studentid' in 'on clause'
+mysql> select students.studentid,students.name,department.dname from students inner join bookissues on students.studentid=bookissues.studentid inner join department on department.dname=students.dnum;
+Empty set, 9 warnings (0.00 sec)
+
+mysql> SELECT s.studentid, s.name, s.department_name
+    -> FROM Students s
+    -> JOIN IssuedBooks ib ON s.studentid = ib.studentid;
+ERROR 1146 (42S02): Table '24mca46.Students' doesn't exist
+mysql> SELECT students.studentid, students.name, department.dname FROM Students JOIN bookissues ON students.studentid = bookissues.studentid;
+ERROR 1146 (42S02): Table '24mca46.Students' doesn't exist
+mysql> select  students.studentid, students.name, department.dname FROM Students JOIN bookissues ON students.studentid = bookissu
+ERROR 1146 (42S02): Table '24mca46.Students' doesn't exist
+mysql> select  students.studentid, students.name, department.dname FROM students JOIN bookissues ON students.studentid = bookissues.studentid;
+ERROR 1054 (42S22): Unknown column 'department.dname' in 'field list'
+mysql> select  students.studentid, students.name, department.dno FROM students JOIN bookissues ON students.studentid = bookissues.studentid;
+ERROR 1054 (42S22): Unknown column 'department.dno' in 'field list'
+mysql> select  students.studentid, students.name, department.dname FROM students JOIN bookissues ON students.studentid = bookissu
+ERROR 1054 (42S22): Unknown column 'department.dname' in 'field list'
+mysql> SELECT students.studentid, students.name, department.dname
+    -> FROM students
+    -> JOIN bookissues ON students.studentid = bookissues.studentid
+    -> JOIN department ON students.dnum = department.dno;
++-----------+------------+-------+
+| studentid | name       | dname |
++-----------+------------+-------+
+|       101 | midhun k   | mca   |
+|       102 | ann mariya | mba   |
+|       103 | sidharth m | mca   |
++-----------+------------+-------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT b.title, b.author
+    -> FROM Books b
+    -> LEFT JOIN BookIssues bi ON b.bookid = bi.bookid
+    -> WHERE bi.bookid IS NULL;
+ERROR 1146 (42S02): Table '24mca46.Books' doesn't exist
+mysql> SELECT books.title, books.author FROM books  LEFT JOIN Bookissues  ON books.bookid = bookissues.bookid WHERE bookissues.bookid IS NULL;
+ERROR 1146 (42S02): Table '24mca46.Bookissues' doesn't exist
+mysql> SELECT books.title, books.author FROM books  LEFT JOIN bookissues  ON books.bookid = bookissues.bookid WHERE bookissues.bookid IS NULL;
++-------------+--------+
+| title       | author |
++-------------+--------+
+|  Algorithms | Cormen |
+| xyz         | fyh    |
++-------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name
+    -> FROM students s
+    -> LEFT JOIN bookissues b ON s.studentid = b.studentid
+    -> WHERE b.studentid IS NULL;
++-----------+------+
+| studentid | name |
++-----------+------+
+|       104 | abc  |
++-----------+------+
+1 row in set (0.01 sec)
+
+mysql> SELECT s.studentid, s.name, b.title, bi.issuedate, bi.returndate
+    -> FROM students s
+    -> JOIN bookissues bi ON s.studentid = bi.studentid
+    -> JOIN books b ON bi.bookid = b.bookid
+    -> WHERE bi.returndate IS NULL;
+ERROR 1054 (42S22): Unknown column 'bi.issuedate' in 'field list'
+mysql> select * from bookissues
+    -> ;
++--------+-----------+------------+-------------+
+| bookid | studentid | issue_date | return_date |
++--------+-----------+------------+-------------+
+|      1 |       101 | 2000-01-21 | 2000-02-12  |
+|      2 |       102 | 2000-01-25 | 2000-01-27  |
+|      3 |       103 | 2000-02-25 | 2000-03-06  |
++--------+-----------+------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name, b.title, bi.issue_date, bi.return_date FROM students s JOIN bookissues bi ON s.studentid =
+bi.studentid JOIN books b ON bi.bookid = b.bookid WHERE bi.return_date IS NULL;
+Empty set (0.00 sec)
+
+mysql> 
+
