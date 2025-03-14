@@ -147,5 +147,100 @@ mysql> desc students;
 +-----------+--------------+------+-----+---------+-------+
 4 rows in set (0.01 sec)
 
+mysql> mysql> insert into students values(1,'abc',22,1),(2,'xyz',23,2);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`24mca46`.`students`, CONSTRAINT `fk_dno` FOREIGN KEY (`dno`) REFERENCES `departments` (`dno`))
+mysql> INSERT INTO students (studentid, name, dno) 
+    -> VALUES 
+    -> (101, 'Student 101', 1),  -- assuming 'MCA' department
+    -> (102, 'Student 102', 1);  -- assuming 'MCA' department
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO bookissues (bookid, studentid, issue_date, return_date, fine) 
+    -> VALUES
+    -> (2, 101, '2025-02-10', NULL, 0.00),
+    -> (1, 102, '2025-02-12', '2025-02-18', 0.00);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT s.studentid, s.name, b.bookid, b.title
+    -> FROM bookissues bi
+    -> JOIN students s ON bi.studentid = s.studentid
+    -> JOIN books b ON bi.bookid = b.bookid;
++-----------+-------------+--------+---------------------------+
+| studentid | name        | bookid | title                     |
++-----------+-------------+--------+---------------------------+
+|       101 | Student 101 |      2 | Operating System Concepts |
+|       102 | Student 102 |      1 | Database Systems          |
++-----------+-------------+--------+---------------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name, d.dname
+    -> FROM students s
+    -> JOIN departments d ON s.dno = d.dno;
++-----------+-------------+-------+
+| studentid | name        | dname |
++-----------+-------------+-------+
+|       101 | Student 101 | MCA   |
+|       102 | Student 102 | MCA   |
++-----------+-------------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name, d.dname, b.bookid, b.title
+    -> FROM students s
+    -> JOIN bookissues bi ON s.studentid = bi.studentid
+    -> JOIN books b ON bi.bookid = b.bookid
+    -> JOIN departments d ON s.dno = d.dno;
++-----------+-------------+-------+--------+---------------------------+
+| studentid | name        | dname | bookid | title                     |
++-----------+-------------+-------+--------+---------------------------+
+|       101 | Student 101 | MCA   |      2 | Operating System Concepts |
+|       102 | Student 102 | MCA   |      1 | Database Systems          |
++-----------+-------------+-------+--------+---------------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT b.bookid, b.title
+    -> FROM books b
+    -> LEFT JOIN bookissues bi ON b.bookid = bi.bookid
+    -> WHERE bi.bookid IS NULL;
++--------+-------------------+
+| bookid | title             |
++--------+-------------------+
+|      3 | Computer Networks |
+|      4 |  Algorithms       |
+|      5 | xyz               |
++--------+-------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name
+    -> FROM students s
+    -> LEFT JOIN bookissues bi ON s.studentid = bi.studentid
+    -> WHERE bi.studentid IS NULL;
+Empty set (0.00 sec)
+
+mysql> SELECT s.studentid, s.name
+    -> FROM students s
+    -> JOIN bookissues bi ON s.studentid = bi.studentid
+    -> WHERE bi.return_date IS NULL;
++-----------+-------------+
+| studentid | name        |
++-----------+-------------+
+|       101 | Student 101 |
++-----------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT b.bookid, b.title
+    -> FROM books b
+    -> WHERE b.price > 600;
++--------+---------------------------+
+| bookid | title                     |
++--------+---------------------------+
+|      2 | Operating System Concepts |
+|      3 | Computer Networks         |
++--------+---------------------------+
+2 rows in set (0.00 sec)
+
 mysql> 
+
+
 
