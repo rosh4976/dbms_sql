@@ -1,0 +1,151 @@
+[mca@localhost ~]$ mySQL 24mca46
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 88
+Server version: 8.0.36 Source distribution
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use 24mca46
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> desc departments;
+ERROR 1146 (42S02): Table '24mca46.departments' doesn't exist
+mysql> desc department;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| dno   | int         | NO   | PRI | NULL    |       |
+| dname | varchar(50) | YES  | UNI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE departments (
+    ->     dno INTEGER PRIMARY KEY,
+    ->     dname VARCHAR(50) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE bookissues (
+    ->     bookid INTEGER,
+    ->     studentid INTEGER,
+    ->     issue_date DATE,
+    ->     return_date DATE,
+    ->     fine DECIMAL(5,2) DEFAULT 0.00
+    -> );
+ERROR 1050 (42S01): Table 'bookissues' already exists
+mysql> drop table bookissues;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE bookissues (
+    ->     bookid INTEGER,
+    ->     studentid INTEGER,
+    ->     issue_date DATE,
+    ->     return_date DATE,
+    ->     fine DECIMAL(5,2) DEFAULT 0.00
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> ALTER TABLE students
+    -> DROP COLUMN course;
+ERROR 1091 (42000): Can't DROP 'course'; check that column/key exists
+mysql> 
+mysql> ALTER TABLE students
+    -> ADD COLUMN dno INTEGER;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE students
+    -> ADD CONSTRAINT fk_dno FOREIGN KEY (dno) REFERENCES departments(dno);
+Query OK, 4 rows affected (0.05 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from students;
++-----------+------------+------+------+------+
+| studentid | name       | age  | dnum | dno  |
++-----------+------------+------+------+------+
+|       101 | midhun k   |   22 |    1 | NULL |
+|       102 | ann mariya |   30 |    2 | NULL |
+|       103 | sidharth m |   22 |    1 | NULL |
+|       104 | abc        |   24 |    2 | NULL |
++-----------+------------+------+------+------+
+4 rows in set (0.00 sec)
+
+mysql> drop table students;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create table students(studentid int primary key, name varchar(100) NOT NULL,course varchar(50) default "MCA", age int, check(age>20 and age <40));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> ALTER TABLE students
+    -> DROP COLUMN course;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE students
+    -> ADD COLUMN dno INTEGER;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE students
+    -> ADD CONSTRAINT fk_dno FOREIGN KEY (dno) REFERENCES departments(dno);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE bookissues
+    -> ADD CONSTRAINT pk_bookissues PRIMARY KEY (bookid, studentid);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> 
+mysql> ALTER TABLE bookissues
+    -> ADD CONSTRAINT fk_bookid FOREIGN KEY (bookid) REFERENCES books(bookid);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE bookissues
+    -> ADD CONSTRAINT fk_studentid FOREIGN KEY (studentid) REFERENCES students(studentid);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO departments (dno, dname) 
+    -> VALUES (1, 'MCA');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO bookissues (bookid, studentid, issue_date, return_date, fine) 
+    -> VALUES
+    -> (2, 101, '2025-02-10', NULL, 0.00),
+    -> (1, 102, '2025-02-12', '2025-02-18', 0.00);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`24mca46`.`bookissues`, CONSTRAINT `fk_studentid` FOREIGN KEY (`studentid`) REFERENCES `students` (`studentid`))
+mysql> INSERT INTO bookissues (bookid, studentid, issue_date, return_date, fine) 
+    -> VALUES
+    -> (2, 101, '2025-02-10', NULL, 0.00),
+    -> (1, 102, '2025-02-12', '2025-02-18', 0.00);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`24mca46`.`bookissues`, CONSTRAINT `fk_studentid` FOREIGN KEY (`studentid`) REFERENCES `students` (`studentid`))
+mysql> select * from students;
+Empty set (0.00 sec)
+
+mysql> desc students;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| studentid | int          | NO   | PRI | NULL    |       |
+| name      | varchar(100) | NO   |     | NULL    |       |
+| age       | int          | YES  |     | NULL    |       |
+| dno       | int          | YES  | MUL | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> 
+
