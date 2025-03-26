@@ -93,4 +93,90 @@ mysql> show tables;
 +-------------------+
 6 rows in set (0.01 sec)
 
-mysql> select 
+mysql> 
+mysql> select * from library;
++--------+-----------+-----+-------+-------------+------+------------+-------------+-------+-------------+---------------------------+----------------------+-------+------------------+
+| bookid | studentid | dno | dname | name        | age  | issue_date | return_date | fine  | librarianid | title                     | author               | price | publication_date |
++--------+-----------+-----+-------+-------------+------+------------+-------------+-------+-------------+---------------------------+----------------------+-------+------------------+
+|      2 |       101 |   1 | MCA   | Student 101 | NULL | 2025-02-10 | NULL        |  0.00 |        NULL | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      1 |       102 |   1 | MCA   | Student 102 | NULL | 2025-02-12 | 2025-02-18  |  0.00 |        NULL | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |
+|      3 |       105 |   1 | MCA   | student 105 |   22 | 2024-09-21 | 2024-10-05  |  0.00 |        NULL | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |
+|      4 |       105 |   1 | MCA   | student 105 |   22 | 2024-07-13 | NULL        | 20.00 |        NULL |  Algorithms               | Cormen               |   100 | 2011-01-23       |
+|      5 |       105 |   1 | MCA   | student 105 |   22 | 2024-09-11 | 2024-10-05  |  0.00 |        NULL | xyz                       | fyh                  |   565 | 2020-05-09       |
+|      7 |       105 |   1 | MCA   | student 105 |   22 | 2024-09-11 | 2024-10-05  |  0.00 |        NULL | indroduction to php       | mathew               |   800 | 2002-12-16       |
+|      5 |       106 |   1 | MCA   | student 106 |   22 | 2024-07-13 | NULL        | 20.00 |        NULL | xyz                       | fyh                  |   565 | 2020-05-09       |
+|      7 |       106 |   1 | MCA   | student 106 |   22 | 2024-09-11 | 2024-10-05  |  0.00 |        NULL | indroduction to php       | mathew               |   800 | 2002-12-16       |
+|      2 |       103 |   2 | MBA   | student 103 |   22 | 2024-05-13 | NULL        | 50.00 |        NULL | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      6 |       109 |   2 | MBA   | student 109 |   21 | 2024-09-11 | 2024-10-05  |  0.00 |        NULL | sql basics                | john                 |   600 | 2007-03-23       |
+|      1 |       104 |   3 | MTECH | student 104 |   23 | 2024-09-21 | 2024-10-25  |  0.00 |        NULL | Database Systems          | Ramez Elmasri        |   500 | 1976-10-10       |
+|      2 |       104 |   3 | MTECH | student 104 |   23 | 2024-09-21 | 2024-10-05  |  0.00 |        NULL | Operating System Concepts | Silberschatz         |   650 | 1960-11-20       |
+|      3 |       104 |   3 | MTECH | student 104 |   23 | 2023-05-13 | NULL        | 30.00 |        NULL | Computer Networks         |  Andrew S. Tanenbaum |   700 | 2000-02-17       |
+|      6 |       107 |   3 | MTECH | student 107 |   24 | 2024-07-13 | 2024-08-25  | 20.00 |        NULL | sql basics                | john                 |   600 | 2007-03-23       |
+|      6 |       108 |   3 | MTECH | student 108 |   21 | 2024-05-11 | 2024-06-05  |  0.00 |        NULL | sql basics                | john                 |   600 | 2007-03-23       |
++--------+-----------+-----+-------+-------------+------+------------+-------------+-------+-------------+---------------------------+----------------------+-------+------------------+
+15 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     s.name AS student_name, 
+    ->     b.title AS book_title, 
+    ->     l.name AS librarian_name
+    -> FROM 
+    ->     bookissues bi
+    -> JOIN 
+    ->     students s ON bi.studentid = s.studentid
+    -> JOIN 
+    ->     books b ON bi.bookid = b.bookid
+    -> JOIN 
+    ->     librarians l ON bi.librarianid = l.librarianid;
+Empty set (0.00 sec)
+
+mysql> SELECT 
+    ->     l.librarianid, 
+    ->     l.name AS librarian_name, 
+    ->     COUNT(bi.bookid) AS total_books_issued
+    -> FROM 
+    ->     bookissues bi
+    -> JOIN 
+    ->     librarians l ON bi.librarianid = l.librarianid
+    -> GROUP BY 
+    ->     l.librarianid, l.name;
+Empty set (0.00 sec)
+
+mysql> SELECT 
+    ->     l.librarianid, 
+    ->     l.name AS librarian_name
+    -> FROM 
+    ->     librarians l
+    -> LEFT JOIN 
+    ->     bookissues bi ON l.librarianid = bi.librarianid
+    -> WHERE 
+    ->     bi.librarianid IS NULL;
++-------------+----------------+
+| librarianid | librarian_name |
++-------------+----------------+
+|           1 | John Smith     |
+|           2 | Emma Brown     |
+|           3 | David Wilson   |
+|           4 | Franklin       |
++-------------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * from  librarians.librarianid,  librarians.name AS librarian_name, COUNT(bookissues.bookid) AS total_books_issu
+ed FROM      booklibrarianid, librarians.name;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'COUNT(bookissues.bookid) AS total_books_issued FROM      bookissues bookissues J' at line 1
+mysql> SELECT 
+    ->     l.librarianid, 
+    ->     l.name AS librarian_name, 
+    ->     COUNT(bi.bookid) AS total_books_issued
+    -> FROM 
+    ->     bookissues bi
+    -> JOIN 
+    ->     librarians l ON bi.librarianid = l.librarianid
+    -> GROUP BY 
+    ->     l.librarianid, l.name;
+Empty set (0.01 sec)
+
+mysql> 
+
+select 
+
