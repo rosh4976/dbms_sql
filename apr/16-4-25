@@ -1,0 +1,378 @@
+[mca@localhost ~]$ mySQL 24mca46
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 29
+Server version: 8.0.41 Source distribution
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use 24mca46;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> show tables;
++-------------------+
+| Tables_in_24mca46 |
++-------------------+
+| books             |
+| issues            |
+| library           |
+| members           |
+| publishers        |
+| returns           |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from books DELIMITER// create procedure listbooks begin select * from books; end// delimiter;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '// create procedure listbooks begin select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// delimiter' at line 1
+mysql> select * from books; DELIMITER// create procedure listbooks begin select
+* from books; end// delimiter;
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER// create procedure listbooks begin select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// delimiter' at line 1
+mysql> select * from books; DELIMITER// create procedure listbooks begin select
+* from books; end// 
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER// create procedure listbooks begin select * from books' at line 1
+    ->  DELIMITER// create procedure listbooks begin select * from books; end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// 
+ DELIMITER// create procedure listbooks begin select * from books' at line 1
+    -> select * from books; DELIMITER// create procedure listbooks begin select
+* from books; end// delimiter;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end//
+select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER// create procedure listbooks begin select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// delimiter' at line 1
+ERROR: 
+No query specified
+
+mysql>  DELIMITER// create procedure listbooks begin select * from books; end//
+delimiter;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER// create procedure listbooks begin select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// delimiter' at line 1
+ERROR: 
+No query specified
+
+mysql>  DELIMITER// create procedure listbooks begin select * from books; end//
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER// create procedure listbooks begin select * from books' at line 1
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end//' at line 1
+mysql> delimiter//
+    -> create procedure listbooks()
+    -> begin
+    -> select * from books;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter//create procedure listbooks()
+begin
+select * from books' at line 1
+mysql> end//
+    ->  DELIMITER// create procedure listbooks begin select * from books; end//
+delimiter;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end//
+ DELIMITER// create procedure listbooks begin select * from books' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end// delimiter' at line 1
+ERROR: 
+No query specified
+
+mysql> select * from books;
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter//
+    -> delimite r//
+    -> delimiter //
+    -> delimiter //;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter//delimite r//
+delimiter //delimiter //' at line 1
+mysql> delimiter //
+mysql> 
+mysql> CREATE PROCEDURE listbooks()
+    -> BEGIN
+    ->     SELECT * FROM books;
+    -> END //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> delimiter ;
+mysql> delimiter//
+    -> delimiter //
+    -> create procedure listbookwithaccno(IN accno INT)
+    -> begin
+    -> select * from books where acc_no=accno;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter//delimiter //create procedure listbookwithaccno(IN accno INT)
+begin
+se' at line 1
+mysql> end
+    -> delimiter;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end
+delimiter' at line 1
+mysql> delimiter//delimiter //create procedure listbookwithaccno(IN accno INT) begin select * from books where acc_no=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter//delimiter //create procedure listbookwithaccno(IN accno INT) begin se' at line 1
+mysql> delimiter //
+mysql> 
+mysql> create procedure listbookwithaccno(IN accno INT) begin select * from books where acc_no=accno;
+    -> end
+    -> delimiter;
+    -> ;
+    -> ;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 3
+mysql> delimiter //
+mysql> 
+mysql> create procedure listbookwithaccno(IN accno INT) begin select * from books where accno=acc_no; end delimiter;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delimiter' at line 1
+mysql> select * from books;
+    -> //
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql> 
+mysql> create procedure listbookwithaccno(IN accno INT) begin select * from books where accno=acc_no; end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> select * from boooks;
+ERROR 1146 (42S02): Table '24mca46.boooks' doesn't exist
+mysql> select * from books;
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql>  create procedure printbookname(OUT bname varchar(100))
+    -> begin
+    -> select name into bname from books where accno=1;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> call printbookname(@bname)
+    -> select @ bname as bookname;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select @ bname as bookname' at line 2
+mysql> call printbookname(@bname) select @bname as bookname;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select @bname as bookname' at line 1
+mysql> call printbookname(@bname); select @bname as bookname;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
++--------------------+
+| bookname           |
++--------------------+
+| NULL               |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> delimiter //\
+ERROR: 
+DELIMITER cannot contain a backslash character
+mysql> delimiter //
+mysql> 
+mysql> create procedure printbookname(OUT bname varchar(100)) begin select title into bname from books where accno=1; end//
+ERROR 1304 (42000): PROCEDURE printbookname already exists
+mysql> create procedure printbook_name(OUT bname varchar(100)) begin select title into bname from books where accno=1; end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call printbookname(@bname);
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> call printbookname(@bname);
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> delimiter //
+mysql>  //
+ERROR: 
+No query specified
+
+mysql> show procedures;
+    -> show procedures ;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'procedures;
+show procedures' at line 1
+mysql> drop procedure name;
+    -> drop procedure name;//
+ERROR 1305 (42000): PROCEDURE 24mca46.name does not exist
+mysql> drop procedure bname;
+    -> //
+ERROR 1305 (42000): PROCEDURE 24mca46.bname does not exist
+mysql> show procedure STATUS where DB='dname';
+    -> //
+Empty set (0.00 sec)
+
+mysql> show procedure STATUS where name='dname';
+    -> //
+Empty set (0.00 sec)
+
+mysql> show procedure STATUS where DB='24mca46';
+    -> ///
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db      | Name              | Type      | Definer            | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| 24mca46 | listbooks         | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:21:54 | 2025-04-16 11:21:54 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | listbookwithaccno | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:37:15 | 2025-04-16 11:37:15 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | printbookname     | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:50:24 | 2025-04-16 11:50:24 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | printbook_name    | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:52:45 | 2025-04-16 11:52:45 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+4 rows in set (0.01 sec)
+
+    -> delimiter ;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '/
+delimiter' at line 1
+mysql>  delimiter  ;
+mysql> show procedure STATUS where DB='24mca46';
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| Db      | Name              | Type      | Definer            | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+| 24mca46 | listbooks         | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:21:54 | 2025-04-16 11:21:54 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | listbookwithaccno | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:37:15 | 2025-04-16 11:37:15 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | printbookname     | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:50:24 | 2025-04-16 11:50:24 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
+| 24mca46 | printbook_name    | PROCEDURE | 24mca46@172.20.3.% | 2025-04-16 11:52:45 | 2025-04-16 11:52:45 | DEFINER       |         | utf8mb4              | utf8mb4_0900_ai_ci   | utf8mb4_0900_ai_ci |
++---------+-------------------+-----------+--------------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+4 rows in set (0.01 sec)
+
+mysql> delimiter //
+mysql> 
+mysql> create procedure listbooknamewithaccno(INOUT val varchar(100) 
+    -> begin
+    -> select title intob val where accno=val;
+    -> end //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin
+select title intob val where accno=val;
+end' at line 2
+mysql> create procedure listbooknamewithaccno(INOUT val varchar(100)  begin select title into val where accno=val; end//
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin select title into val where accno=val; end' at line 1
+mysql> create procedure listbooknamewithaccno(INOUT val varchar(100))  begin select title into val where accno=val; end//
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call listbooknamewithaccno;
+ERROR 1318 (42000): Incorrect number of arguments for PROCEDURE 24mca46.listbooknamewithaccno; expected 1, got 0
+mysql> select (@val);
++----------------+
+| (@val)         |
++----------------+
+| NULL           |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> set @val=1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call listbooknamewithaccno;
+ERROR 1318 (42000): Incorrect number of arguments for PROCEDURE 24mca46.listbooknamewithaccno; expected 1, got 0
+mysql> select (@val);
++--------+
+| (@val) |
++--------+
+|      1 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select title intob val from books where accno=val;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'val from books where accno=val' at line 1
+mysql> delimiter //
+mysql> 
+mysql> select title intob val from books where accno=val;
+    -> select title into val from books where accno=val;
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'val from books where accno=val;
+select title into val from books where accno=val' at line 1
+mysql> delimiter //
+mysql> 
+mysql> select title into val from books where accno=val; 
+    -> b
+    -> //
+ERROR 1327 (42000): Undeclared variable: val
+mysql> delimiter //
+mysql> 
+mysql> create procedure ll(INOUT val varchar(100))
+    -> begin
+    -> select title into val from books where accno=val;
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> set @val=2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call ll(@val);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @val;
++---------------------------+
+| @val                      |
++---------------------------+
+| Advanced Database Systems |
++---------------------------+
+1 row in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create function listbooks()
+    -> returns varchar(100)\
+    -> //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> delimiter //
+mysql> create function listbooks() 
+    -> returns varchar(100)
+    -> reads SQL data
+    -> begin
+    -> declare bname varchar(100);
+    -> select title into bname where accno=1;
+    -> return bname 
+    -> end //
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end' at line 8
+mysql> delimiter;
+    -> 
+
