@@ -1,0 +1,92 @@
+[mca@localhost ~]$ mySQL 24mca46
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 38
+Server version: 8.0.41 Source distribution
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use 24mca46
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_24mca46 |
++-------------------+
+| books             |
+| issues            |
+| library           |
+| members           |
+| publishers        |
+| returns           |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> sect * from books;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sect * from books' at line 1
+mysql> select * from books;
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+| accno | title                     | author        | price | type      | availability | publisherid |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+|     1 | Learn SQL                 | John Doe      | 29.99 | lending   | yes          |           1 |
+|     2 | Advanced Database Systems | Jane Smith    | 49.99 | reference | yes          |           2 |
+|     3 | Python Programming        | Alice Johnson | 39.50 | lending   | no           |           3 |
+|     4 | Data Structures           | Bob Brown     | 19.95 | lending   | yes          |           4 |
+|     5 | Machine Learning Basics   | Charlie Davis | 59.75 | reference | no           |           5 |
++-------+---------------------------+---------------+-------+-----------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> create trigger checkprice before update on books;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create trigger checkprice before update on books begin 
+    -> if new price>1000 then 
+    -> print"updation not possible"
+    -> end if 
+    -> end
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin 
+if new price>1000 then 
+print"updation not possible"
+end if 
+end' at line 1
+mysql> create trigger checkprice before update on books begin  if new.price>1000
+ then  print"updation not possible" end if  end;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin  if new.price>1000 then  print"updation not possible" end if  end' at line 1
+mysql> create trigger checkprice before update on books begin  if new.price>1000 then  print "updation not possible" end if  end;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin  if new.price>1000 then  print "updation not possible" end if  end' at line 1
+mysql> DELIMITER $$
+mysql> 
+mysql> CREATE PROCEDURE GetBookPrice(IN bookTitle VARCHAR(100))
+    -> BEGIN
+    ->     SELECT CONCAT('The price of "', title, '" is $', FORMAT(price, 2)) AS BookPrice
+    ->     FROM books
+    ->     WHERE title = bookTitle;
+    -> END $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> DELIMITER $$
+mysql> 
+mysql> CREATE TRIGGER checkprice BEFORE UPDATE ON books
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.price > 1000 THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Updation not possible: Price exceeds limit.';
+    ->     END IF;
+    -> END$$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> 
+
