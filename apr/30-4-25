@@ -88,5 +88,90 @@ Query OK, 0 rows affected (0.01 sec)
 
 mysql> 
 mysql> DELIMITER ;
+mysql> mysql> DELIMITER $$
 mysql> 
+mysql> CREATE FUNCTION CalculateFine(delayed_days INT, fine_per_day DECIMAL(10, 2))
+    -> RETURNS DECIMAL(10, 2)
+    -> DETERMINISTIC
+    -> BEGIN
+    ->     DECLARE total_fine DECIMAL(10, 2);
+    ->     SET total_fine = delayed_days * fine_per_day;
+    ->     RETURN total_fine;
+    -> END$$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> DELIMITER ;
+mysql> SELECT CalculateFine(5, 2.50) AS TotalFine;
++-----------+
+| TotalFine |
++-----------+
+|     12.50 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> CALL GetBookPrice('To Kill a Mockingbird');
+Empty set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> display_book_price("To Kill a Mockingbird", 15.99)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'display_book_price("To Kill a Mockingbird", 15.99)' at line 1
+mysql> DELIMITER $$
+mysql> 
+mysql> CREATE TRIGGER set_availability_before_insert
+    -> AFTER INSERT ON issues
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     UPDATE books
+    ->     SET availability = 'No'
+    ->     WHERE book_id = NEW.book_id;
+    -> END$$
+ERROR 1054 (42S22): Unknown column 'book_id' in 'NEW'
+mysql> 
+mysql> DELIMITER ;
+mysql> CREATE FUNCTION CalculateFine(delayed_days INT, fine_per_day DECIMAL(10, 2)) RETURNS DECIMAL(10, 2) DETERMINISTIC BEGIN     DECLARE total_fine DECIMAL(10, 2);     SET total_fine = delayed_days * fine_per_day;     RETURN total_fine; END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+ERROR 1193 (HY000): Unknown system variable 'total_fine'
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'RETURN total_fine' at line 1
+    -> CREATE TRIGGER set_availability_before_insert AFTER INSERT ON issues FOR EACH ROW BEGIN     UPDATE books     SET availability = 'No'     WHERE bookid = NEW.bookid; END$$
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END$$
+CREATE TRIGGER set_availability_before_insert AFTER INSERT ON issues FOR E' at line 1
+    -> DELIMITER $$
+    -> 
+    -> CREATE PROCEDURE GetBookPrice(IN bookTitle VARCHAR(100))
+    -> BEGIN
+    ->     SELECT CONCAT('The price of "', title, '" is $', FORMAT(price, 2)) AS BookPrice
+    ->     FROM books
+    ->     WHERE title = bookTitle;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END$$
+DELIMITER $$
+CREATE PROCEDURE GetBookPrice(IN bookTitle VARCHAR(100))
+BEGI' at line 1
+mysql> END $$
+    -> 
+    -> DELIMITER ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'END $$
+
+DELIMITER' at line 1
+mysql> DELIMITER $$
+mysql> 
+mysql> CREATE PROCEDURE GetBookPrice(IN bookTitle VARCHAR(100))
+    -> BEGIN
+    ->     SELECT CONCAT('The price of "', title, '" is $', FORMAT(price, 2)) AS BookPrice
+    ->     FROM books
+    ->     WHERE title = bookTitle;
+    -> END $$
+ERROR 1304 (42000): PROCEDURE GetBookPrice already exists
+mysql> 
+mysql> DELIMITER ;
+mysql> CALL GetBookPrice('To Kill a Mockingbird');
+Empty set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+
+
 
