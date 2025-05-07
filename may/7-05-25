@@ -1,0 +1,431 @@
+[mca@localhost ~]$ mongo
+Enter your MongoDB username: 24mca46
+Enter your MongoDB password: 
+Current Mongosh Log ID:	681b1f8b06116ce081d861df
+Connecting to:		mongodb://<credentials>@172.20.3.1:27017/24mca46_db?authSource=24mca46_db&directConnection=true&appName=mongosh+2.5.0
+Using MongoDB:		6.0.23
+Using Mongosh:		2.5.0
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+24mca46_db>   show dbs
+
+24mca46_db> use 24mca46
+switched to db 24mca46
+24mca46> db
+24mca46
+24mca46> db.createCollection("mybd")
+MongoServerError[Unauthorized]: not authorized on 24mca46 to execute command { create: "mybd", lsid: { id: UUID("0c6075f9-8639-4a65-9bb4-02503e9f6d1c") }, $db: "24mca46" }
+24mca46> use 24mca46_db
+switched to db 24mca46_db
+24mca46_db> db.createCollection("mybd")
+{ ok: 1 }
+24mca46_db> show collections
+mybd
+24mca46_db> db.createCollection("student")
+{ ok: 1 }
+24mca46_db> db.student.insertOne({rollno:1,name:"anil",age:20})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b22cd06116ce081d861e0')
+}
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 20
+  }
+]
+24mca46_db> 
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+24mca46_db> 
+[mca@localhost ~]$ ^C
+[mca@localhost ~]$ mongo
+Enter your MongoDB username: 24mca46
+Enter your MongoDB password: 
+Current Mongosh Log ID:	681b2449292d0d931cd861df
+Connecting to:		mongodb://<credentials>@172.20.3.1:27017/24mca46_db?authSource=24mca46_db&directConnection=true&appName=mongosh+2.5.0
+Using MongoDB:		6.0.23
+Using Mongosh:		2.5.0
+mongosh 2.5.1 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+24mca46_db> show collections
+mybd
+student
+24mca46_db> db.student.insertOne({rollno:2,name:"abc"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b256e292d0d931cd861e0')
+}
+24mca46_db> db.student.find
+[Function: find] AsyncFunction {
+  returnsPromise: true,
+  apiVersions: [ 1, Infinity ],
+  returnType: 'Cursor',
+  serverVersions: [ '0.0.0', '999.999.999' ],
+  topologies: [ 'ReplSet', 'Sharded', 'LoadBalanced', 'Standalone' ],
+  deprecated: false,
+  platforms: [ 'Compass', 'Browser', 'CLI' ],
+  isDirectShellCommand: false,
+  acceptsRawInput: false,
+  shellCommandCompleter: undefined,
+  help: [Function (anonymous)] Help
+}
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 20
+  },
+  { _id: ObjectId('681b256e292d0d931cd861e0'), rollno: 2, name: 'abc' }
+]
+24mca46_db> db.student.find({rollno:2})
+[
+  { _id: ObjectId('681b256e292d0d931cd861e0'), rollno: 2, name: 'abc' }
+]
+24mca46_db> db.student.find({$and:[{rollno:1,age:22}]})
+
+24mca46_db> db.student.insertOne({rollno:3,name:ghi,age:22})
+ReferenceError: ghi is not defined
+24mca46_db> db.student.insertOne({rollno:3,name:"ghi",age:22})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b2771292d0d931cd861e1')
+}
+24mca46_db> db.student.find({$and:[{rollno:1,age:22}]})
+
+24mca46_db> db.student.find({$and:[{rollno:3,age:22}]})
+[
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  }
+]
+24mca46_db> db.student.find({$or:[{rollno:3,age:22}]})
+[
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  }
+]
+24mca46_db> db.student.find({$or:[{rollno:1,age:22}]})
+
+24mca46_db> db.student.find({$or:[{rollno:3,age:22}]})
+[
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  }
+]
+24mca46_db> db.student.find({},{rollno:1,name:1})
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil'
+  },
+  { _id: ObjectId('681b256e292d0d931cd861e0'), rollno: 2, name: 'abc' },
+  { _id: ObjectId('681b2771292d0d931cd861e1'), rollno: 3, name: 'ghi' }
+]
+24mca46_db> db.student.insertOne({rollno:4,name:"xyz",age:25,phone:["9446244976"]})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b29ef292d0d931cd861e2')
+}
+24mca46_db> db.student,insertOne({rollno:5,name:"wer",age:24,address:{city:"malappuram",state:"kerala"}})
+ReferenceError: insertOne is not defined
+24mca46_db> db.student.insertOne({rollno:5,name:"wer",age:24,address:{city:"malappuram",state:"kerala"}})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b2b36292d0d931cd861e3')
+}
+24mca46_db> db.student.insertOne({rollno:6,name:"gjhn",age:23,project:[{pid:101,pname:"x"},{pid:162,pname:"y"}]})
+{
+  acknowledged: true,
+  insertedId: ObjectId('681b2bd0292d0d931cd861e4')
+}
+24mca46_db> db.student.updateOne({rollno:1},{$set:{age:23}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  { _id: ObjectId('681b256e292d0d931cd861e0'), rollno: 2, name: 'abc' },
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phone: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  }
+]
+24mca46_db> db.student.updateOne({phone:{$exists:true}},{$rename:{phone:"phoneno"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  { _id: ObjectId('681b256e292d0d931cd861e0'), rollno: 2, name: 'abc' },
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  }
+]
+24mca46_db> db.student.deleteOne({rollno:2})
+{ acknowledged: true, deletedCount: 1 }
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  {
+    _id: ObjectId('681b2771292d0d931cd861e1'),
+    rollno: 3,
+    name: 'ghi',
+    age: 22
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  }
+]
+24mca46_db> db.student.deleteOne({rollno:3})
+{ acknowledged: true, deletedCount: 1 }
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  }
+]
+24mca46_db> db.student.updateOne({rollno:1},{$unset:{phone:"94462144976"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+24mca46_db> db.student.find().count()
+4
+24mca46_db> db.student.find().count(3)
+4
+24mca46_db> db.student.find().limit(3)
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  }
+]
+24mca46_db> db.student.find().sort({name:1})\
+Uncaught:
+SyntaxError: Expecting Unicode escape sequence \uXXXX. (1:33)
+
+> 1 | db.student.find().sort({name:1})\
+    |                                  ^
+  2 |
+
+24mca46_db> db.student.find().sort({name:1})
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  }
+]
+24mca46_db> db.student.createIndex({rollno:1},{unique:true})
+rollno_1
+24mca46_db> db.student.find()
+[
+  {
+    _id: ObjectId('681b22cd06116ce081d861e0'),
+    rollno: 1,
+    name: 'anil',
+    age: 23
+  },
+  {
+    _id: ObjectId('681b29ef292d0d931cd861e2'),
+    rollno: 4,
+    name: 'xyz',
+    age: 25,
+    phoneno: [ '9446244976' ]
+  },
+  {
+    _id: ObjectId('681b2b36292d0d931cd861e3'),
+    rollno: 5,
+    name: 'wer',
+    age: 24,
+    address: { city: 'malappuram', state: 'kerala' }
+  },
+  {
+    _id: ObjectId('681b2bd0292d0d931cd861e4'),
+    rollno: 6,
+    name: 'gjhn',
+    age: 23,
+    project: [ { pid: 101, pname: 'x' }, { pid: 162, pname: 'y' } ]
+  }
+]
+24mca46_db> 
+
+24mca46_db>                                                                                                                                                                                                                     
+
