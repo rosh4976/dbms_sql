@@ -67,28 +67,9 @@ db.orders.find({"items.pno":"P2"})
 
 ----8.Retrieve all documents with orders that contain products whose quantity is less than 13 ----
 
- db.orders.find({"items.quantity":{$lt:13}})
 
+db.orders.aggregate([{$match: {"items.quantity": { $lt: 13 }}},{$project: {order_no: 1,items: {$filter: {input: "$items",as: "item",cond: { $lt: ["$$item.quantity", 13] } }}}}])
 
-db.orders.aggregate([
-  {
-    $match: {
-      "items.quantity": { $lt: 13 }
-    }
-  },
-  {
-    $project: {
-      order_no: 1,
-      items: {
-        $filter: {
-          input: "$items",
-          as: "item",
-          cond: { $lt: ["$$item.quantity", 13] }
-        }
-      }
-    }
-  }
-])
 
 
 
