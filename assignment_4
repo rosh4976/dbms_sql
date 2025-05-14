@@ -70,6 +70,25 @@ db.orders.find({"items.pno":"P2"})
  db.orders.find({"items.quantity":{$lt:13}})
 
 
+db.orders.aggregate([
+  {
+    $match: {
+      "items.quantity": { $lt: 13 }
+    }
+  },
+  {
+    $project: {
+      order_no: 1,
+      items: {
+        $filter: {
+          input: "$items",
+          as: "item",
+          cond: { $lt: ["$$item.quantity", 13] }
+        }
+      }
+    }
+  }
+])
 
 
 
